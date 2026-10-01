@@ -347,14 +347,16 @@ h1, h2, h3, h4 {
 }
 
 .img-modal-content {
-  width: 1200px;
-  height: 900px;
-  max-width: 90vw;
+  box-sizing: border-box;
+  width: min(1100px, 92vw);
+  aspect-ratio: 4 / 3;
   max-height: 80vh;
-  object-fit: contain;              
-  background-color: rgba(0, 0, 0, 0.3); 
+  object-fit: contain;
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   padding: 10px;
+  display: block;
+  margin: 0 auto;
 }
 
 .img-close {
@@ -771,14 +773,7 @@ footer {
   .email-display {
     font-size: 1.3rem;
   }
-  .img-modal-content {
-    height: 200px !important;     
-    width: 340px !important;     
-    
-    object-fit: cover;          
-    display: block;
-    margin: 0 auto;
-  }
+
 
 
 }
