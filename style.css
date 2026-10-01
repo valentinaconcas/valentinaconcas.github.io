@@ -348,8 +348,8 @@ h1, h2, h3, h4 {
 
 .img-modal-content {
   box-sizing: border-box;
-  width: min(1000px, 92vw);
-  height: min(700px, 70vh);
+  width: min(800px, 92vw)!important;
+  height: min(500px, 70vh)!important;
   object-fit: contain;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
