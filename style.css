@@ -347,8 +347,8 @@ h1, h2, h3, h4 {
 }
 
 .img-modal-content {
-  width: 800px;
-  height: 500px;
+  width: 1200px;
+  height: 900px;
   max-width: 90vw;
   max-height: 80vh;
   object-fit: contain;              
