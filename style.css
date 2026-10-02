@@ -666,7 +666,11 @@ footer {
   }
 
   .hero h1 { font-size: 2rem; }
-  .grid-2 { grid-template-columns: 1fr; }
+   .grid-2 { grid-template-columns: 1fr;  gap: 40px; }
+  .about-card > ul {margin-left: 12px;}
+  
+  li:nth-child(odd) {background-color: var(--border-color); margin-bottom: 12px;}
+  li:nth-child(even){background-color: rgb(from var(--primary-orange) r g b / 8%); margin-bottom: 12px;  }
   
   .nav-links {
     display: none;
@@ -705,7 +709,8 @@ footer {
     grid-template-columns: 1fr; 
     grid-template-rows: auto;
   }
-  
+
+  .bg-Nalema,.bg-scuderia,.bg-cooperativa,.bg-hora { background-size: contain; }
   .img-modal-content {
     height: 200px !important;     
     width: 340px !important;     
