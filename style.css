@@ -669,8 +669,8 @@ footer {
    .grid-2 { grid-template-columns: 1fr;  gap: 40px; }
   .about-card > ul {margin-left: 12px;}
   
-  li:nth-child(odd) {background-color: var(--border-color); margin-bottom: 12px;}
-  li:nth-child(even){background-color: rgb(from var(--primary-orange) r g b / 8%); margin-bottom: 12px;  }
+  li:nth-child(odd) {background-color: var(--border-color); margin-bottom: 12px;padding:2px}
+  li:nth-child(even){background-color: rgb(from var(--primary-orange) r g b / 8%); margin-bottom: 12px;padding:2px  }
   
   .nav-links {
     display: none;
@@ -709,7 +709,7 @@ footer {
     grid-template-columns: 1fr; 
     grid-template-rows: auto;
   }
-
+   .card-image{height:210px ;}
   .bg-Nalema,.bg-scuderia,.bg-cooperativa,.bg-hora { background-size: contain; }
   .img-modal-content {
     height: 200px !important;     
