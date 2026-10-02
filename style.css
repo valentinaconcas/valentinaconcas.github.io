@@ -709,8 +709,8 @@ footer {
     grid-template-columns: 1fr; 
     grid-template-rows: auto;
   }
-   .card-image{height:210px ;}
-  .bg-Nalema,.bg-scuderia,.bg-cooperativa,.bg-hora { background-size: contain; }
+   .card-image{height:240px ;width: auto ;}
+  
   .img-modal-content {
     height: 200px !important;     
     width: 340px !important;     
