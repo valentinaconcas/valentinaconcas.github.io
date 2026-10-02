@@ -19,7 +19,7 @@ const projectsData = {
     objective: "Sviluppare l'identità visiva per un brand di candele di fascia alta, sostituendo la fotografia classica con render 3D fotorealistici.",
     tools: [
       { name: "Adobe Illustrator", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg" },
-      { name: "Adobe Dimension", icon: "immagini/adobe-dimension-icon.webp" },
+      { name: "Adobe Dimension", icon: "immagini//adobe-dimension-icon.png" },
       { name: "Adobe Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" }
     ],
     deliverables: [
@@ -29,7 +29,7 @@ const projectsData = {
   },
 
   scuderia: {
-    title: "Scuderia Country Club",
+    title: "Scuderia<br/> Country Club",
     subtitle: "Web Design & Sviluppo WordPress",
     pdfUrl: "presentazioni/CountryClub.pdf",
     figmaUrl: "https://www.figma.com/design/c95oMFWcYJrZkKxeEOFO1h/Country--Club?node-id=10-284&t=qzkhGKhIbejkWs02-1",
@@ -50,7 +50,7 @@ const projectsData = {
   },
 
   cooperativa: {
-    title: "Comunione&Cooperazione",
+    title: "Comunione&<br/>Cooperazione",
     subtitle: "Rebranding & Welcome Kit 3D",
     pdfUrl: "presentazioni/Cooperativa.pdf",
     coverUrl: "immagini/cooperativa1.webp",
@@ -63,7 +63,7 @@ const projectsData = {
     objective: "Ammodernare l'immagine coordinata di un'organizzazione no-profit per renderla attrattiva verso nuovi partner e creare un Welcome Kit per i dipendenti.",
     tools: [
       { name: "Adobe Illustrator", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg" },
-      { name: "Adobe Dimension", icon: "immagini/adobe-dimension-icon.webp" },
+      { name: "Adobe ", icon:  "immagini//adobe--icon.png" },
       { name: "Adobe Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" }
     ],
     deliverables: [
