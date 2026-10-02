@@ -735,7 +735,8 @@ br.mobile-br {
 
 
  .card-image{height:240px ;width: auto ;}
-
+ 
+.mockup-thumb{width: 70vw;}
  .bg-Nalema { background-image: url(immagini/nalema8.webp);  }
 .bg-scuderia { background-image: url(immagini/header.webp); }
 .bg-cooperativa {background-image: url(immagini/cooperativa1.webp);   }
