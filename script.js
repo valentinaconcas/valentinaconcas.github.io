@@ -8,12 +8,13 @@ const projectsData = {
       "immagini/nalema1.webp",
       "immagini/nalema3.webp",
       "immagini/nalema6.webp",
-      "immagini/nalema8.webp",
+      "immagini/header3.webp",
       "immagini/nalema9.webp",
       "immagini/nalema10.webp",
       "immagini/nalema11.webp",
     ],
-    coverUrl: "immagini/header3.webp",
+    coverUrl: "immagini/nalema8.webp",
+    coverPositionMobile: "center top", 
     liveUrl: "",
     objective: "Sviluppare l'identità visiva per un brand di candele di fascia alta, sostituendo la fotografia classica con render 3D fotorealistici.",
     tools: [
@@ -33,7 +34,7 @@ const projectsData = {
     pdfUrl: "presentazioni/CountryClub.pdf",
     figmaUrl: "https://www.figma.com/design/c95oMFWcYJrZkKxeEOFO1h/Country--Club?node-id=10-284&t=qzkhGKhIbejkWs02-1",
     liveUrl: "https://progetto3valentinaconcas.42web.io",
-    coverUrl: "immagini/scuderia.webp",
+    coverUrl: "immagini/header.webp",
     mockups: [],
     objective: "Realizzare il mockup di una landing page responsive per un maneggio, costruita per rispecchiare fedelmente l’immagine aziendale e migliorare la comunicazione dei servizi attraverso un design chiaro, professionale e accessibile al pubblico.",
     tools: [
@@ -49,12 +50,12 @@ const projectsData = {
   },
 
   cooperativa: {
-    title: "Comunione&<br>Cooperazione",
+    title: "Comunione&Cooperazione",
     subtitle: "Rebranding & Welcome Kit 3D",
     pdfUrl: "presentazioni/Cooperativa.pdf",
-    coverUrl: "immagini/scatole1.webp",
+    coverUrl: "immagini/cooperativa1.webp",
     mockups: [
-      "immagini/cooperativa1.webp",
+      "immagini/scatole1.webp",
       "immagini/cooperativa2.webp",
       "immagini/cooperativa4.webp",
       "immagini/cooperativa6.webp",
@@ -62,7 +63,7 @@ const projectsData = {
     objective: "Ammodernare l'immagine coordinata di un'organizzazione no-profit per renderla attrattiva verso nuovi partner e creare un Welcome Kit per i dipendenti.",
     tools: [
       { name: "Adobe Illustrator", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg" },
-      {name: "Adobe Dimension", icon: "immagini/adobe-dimension-icon.webp" },
+      { name: "Adobe Dimension", icon: "immagini/adobe-dimension-icon.webp" },
       { name: "Adobe Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" }
     ],
     deliverables: [
@@ -94,6 +95,7 @@ const projectsData = {
   }
 };
 
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // MENU MOBILE
@@ -113,6 +115,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("projectModal");
   const modalBody = document.getElementById("modalBody");
   const modalClose = document.getElementById("modalClose");
+
+  // POSIZIONE COPERTINA SOLO SU TELEFONO
+  const mqMobile = window.matchMedia("(max-width: 768px)");
+
+  function applyCoverPosition() {
+    const data = projectsData[modalBody.dataset.projectId];
+    const coverImg = modalBody.querySelector(".pdf-cover");
+    if (!data || !coverImg) return;
+
+    // Se siamo su mobile e il progetto ha una posizione dedicata la applica,
+    // altrimenti svuota il valore e resta quello del CSS
+    coverImg.style.objectPosition =
+      (mqMobile.matches && data.coverPositionMobile) || "";
+  }
+
+  // Se ruoti il telefono o ridimensioni la finestra con la modale aperta
+  mqMobile.addEventListener("change", applyCoverPosition);
 
   projectCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -152,13 +171,13 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <div class="pdf-viewer-container">
-          <img src="${data.coverUrl}" class="pdf-cover" alt="Anteprima Progetto">
+          <img src="${data.coverUrl}" class="pdf-cover" alt="Anteprima progetto ${data.title}">
         </div>
 
         ${data.mockups && data.mockups.length > 0 ? `
           <div class="mockup-scroll">
             ${data.mockups.map((img, i) => `
-              <img src="${img}" class="mockup-thumb" data-index="${i}">
+              <img src="${img}" class="mockup-thumb" data-index="${i}" alt="${data.title} - mockup ${i + 1}">
             `).join("")}
           </div>
         ` : ""}
@@ -187,6 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Salvo l’ID del progetto nella modale
       modalBody.dataset.projectId = projectId;
+
+      // Applico la posizione della copertina (solo mobile, solo se definita)
+      applyCoverPosition();
 
       modal.style.display = "flex";
       modal.style.flexDirection = "column";
