@@ -313,6 +313,7 @@ h1, h2, h3, h4 {
   overflow-x: auto;
   gap: 15px;
   padding: 10px 0;
+ 
 }
 
 .mockup-scroll::-webkit-scrollbar {
@@ -647,6 +648,15 @@ footer {
   color: var(--text-muted);
 }
 
+/*  privacy */
+.privacy { max-width: 760px; }
+    .privacy h1 { font-size: 2.2rem; margin-bottom: 8px; }
+    .privacy h2 { font-size: 1.25rem; margin: 32px 0 10px; }
+    .privacy p, .privacy li { margin-bottom: 10px; }
+    .privacy ul { padding-left: 20px; }
+    .privacy .updated { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .privacy a { color: var(--primary-orange); }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .hero-grid {
@@ -734,11 +744,12 @@ br.mobile-br {
   }
 
 
- .card-image{height:240px ;width: auto ;}
- 
-.mockup-thumb{width: 70vw;}
+ .card-image{height:230px ;width: auto ;}
+
  .bg-Nalema { background-image: url(immagini/nalema8.webp);  }
 .bg-scuderia { background-image: url(immagini/header.webp); }
 .bg-cooperativa {background-image: url(immagini/cooperativa1.webp);   }
 .bg-hora { background-image: url(immagini/header2.webp);  }
+
+.mockup-thumb{width: 70vw;}
 }
