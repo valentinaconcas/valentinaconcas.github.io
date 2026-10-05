@@ -3,7 +3,7 @@
   --primary-blue: #04143A;
   --secondary-blue: #3d4f75;
   --primary-orange: #cd3c07;
-  --hover-orange: #E67B07;
+  --hover-orange: #a83005;
   --bg-offwhite: #F3F5F7;
   --bg-white: #ffffff;
   --text-dark: #000000;
@@ -89,10 +89,19 @@ h1, h2, h3, h4 {
 
 .menu-centrale {
   display: flex;
+ 
   align-items: center;
   gap: 30px;
   margin: 0 auto;
 }
+.menu-centrale ul{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  margin: 0 auto;
+}
+.menu-centrale li{list-style: none;}
 
 .menu-centrale a {
   text-decoration: none;
