@@ -87,19 +87,15 @@ h1, h2, h3, h4 {
   margin-left: 40px;
 }
 
-.menu-centrale {
-  display: flex;
- 
-  align-items: center;
-  gap: 30px;
-  margin: 0 auto;
-}
-.menu-centrale ul{
+.menu-centrale,
+.menu-centrale ul {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 30px;
   margin: 0 auto;
+  list-style: none;
+  padding: 0;
 }
 .menu-centrale li{list-style: none;}
 
@@ -702,9 +698,11 @@ footer {
     gap: 15px;
   }
 
-  .menu-centrale {
+ .menu-centrale,
+  .menu-centrale ul {
     flex-direction: column;
     gap: 15px;
+    width: 100%;
   }
   
   .nav-links.active { display: flex; }
