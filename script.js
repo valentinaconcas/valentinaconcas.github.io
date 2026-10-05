@@ -140,6 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!data) return;
 
+      // Pulisco il titolo da eventuali tag HTML per gli attributi alt
+      const cleanTitle = data.title.replace(/<[^>]*>/g, "").trim();
+
       // Bottoni azione
       let actionButtons = "";
       if (data.liveUrl) {
@@ -155,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Badge tool con Icona e Nome
       const toolsHtml = data.tools.map(t => `
         <span class="tool-badge">
-          <img src="${t.icon}" alt="${t.name}" class="tool-icon">
+          <img src="${t.icon}" alt="Icona ${t.name}" class="tool-icon">
           <span>${t.name}</span>
         </span>
       `).join("");
@@ -171,13 +174,13 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <div class="pdf-viewer-container">
-          <img src="${data.coverUrl}" class="pdf-cover" alt="Anteprima progetto ${data.title}">
+          <img src="${data.coverUrl}" class="pdf-cover" alt="Copertina del progetto ${cleanTitle}">
         </div>
 
         ${data.mockups && data.mockups.length > 0 ? `
           <div class="mockup-scroll">
             ${data.mockups.map((img, i) => `
-              <img src="${img}" class="mockup-thumb" data-index="${i}" alt="${data.title} - mockup ${i + 1}">
+              <img src="${img}" class="mockup-thumb" data-index="${i}" alt="Mockup ${i + 1} del progetto ${cleanTitle}">
             `).join("")}
           </div>
         ` : ""}
@@ -198,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="summary-item">
               <strong>Risultato</strong>
-              <ul>${deliverablesHtml}</ul>
+              <div class="deliverables-list"><ul>${deliverablesHtml}</ul></div>
             </div>
           </div>
         </div>
@@ -245,24 +248,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const projectId = modalBody.dataset.projectId;
       const data = projectsData[projectId];
+      const cleanTitle = data.title.replace(/<[^>]*>/g, "").trim();
 
       currentMockups = data.mockups;
       currentIndex = parseInt(e.target.dataset.index);
 
       imgModalContent.src = currentMockups[currentIndex];
+      imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
       imgModal.style.display = "flex";
     }
   });
 
   // Navigazione
   imgPrev.addEventListener("click", () => {
+    const projectId = modalBody.dataset.projectId;
+    const cleanTitle = projectsData[projectId] ? projectsData[projectId].title.replace(/<[^>]*>/g, "").trim() : "";
+    
     currentIndex = (currentIndex - 1 + currentMockups.length) % currentMockups.length;
     imgModalContent.src = currentMockups[currentIndex];
+    imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
   });
 
   imgNext.addEventListener("click", () => {
+    const projectId = modalBody.dataset.projectId;
+    const cleanTitle = projectsData[projectId] ? projectsData[projectId].title.replace(/<[^>]*>/g, "").trim() : "";
+
     currentIndex = (currentIndex + 1) % currentMockups.length;
     imgModalContent.src = currentMockups[currentIndex];
+    imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
   });
 
   // Chiudi
