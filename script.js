@@ -95,138 +95,152 @@ const projectsData = {
   }
 };
 
-
 document.addEventListener("DOMContentLoaded", () => {
 
   // MENU MOBILE
   const menuToggle = document.getElementById("menuToggle");
   const navLinks = document.getElementById("navLinks");
 
-  if (menuToggle) {
+  if (menuToggle && navLinks) {
+    menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.addEventListener("click", () => {
-      navLinks.classList.toggle("active");
+      const isActive = navLinks.classList.toggle("active");
+      menuToggle.setAttribute("aria-expanded", isActive ? "true" : "false");
     });
   }
 
-  // SELEZIONE CORRETTA DELLE CARD
+  // ELEMENTI MODALE
   const projectCards = document.querySelectorAll(".project-card");
-
-  // MODALE
   const modal = document.getElementById("projectModal");
   const modalBody = document.getElementById("modalBody");
   const modalClose = document.getElementById("modalClose");
 
-  // POSIZIONE COPERTINA SOLO SU TELEFONO
-  const mqMobile = window.matchMedia("(max-width: 768px)");
+  let lastFocusedElement = null; // Memorizza l'elemento che ha aperto la modale
 
+  // Helper: Trova tutti gli elementi focalizzabili in un contenitore
+  function getFocusableElements(container) {
+    return Array.from(
+      container.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    );
+  }
+
+  // Posizionamento copertina mobile
+  const mqMobile = window.matchMedia("(max-width: 768px)");
   function applyCoverPosition() {
     const data = projectsData[modalBody.dataset.projectId];
     const coverImg = modalBody.querySelector(".pdf-cover");
     if (!data || !coverImg) return;
-
-    // Se siamo su mobile e il progetto ha una posizione dedicata la applica,
-    // altrimenti svuota il valore e resta quello del CSS
-    coverImg.style.objectPosition =
-      (mqMobile.matches && data.coverPositionMobile) || "";
+    coverImg.style.objectPosition = (mqMobile.matches && data.coverPositionMobile) || "";
   }
-
-  // Se ruoti il telefono o ridimensioni la finestra con la modale aperta
   mqMobile.addEventListener("change", applyCoverPosition);
 
+  // APERTURA MODALE PROGETTO
+  function openProjectModal(projectId, triggerCard) {
+    const data = projectsData[projectId];
+    if (!data) return;
+
+    lastFocusedElement = triggerCard || document.activeElement;
+    const cleanTitle = data.title.replace(/<[^>]*>/g, "").trim();
+
+    let actionButtons = "";
+    if (data.liveUrl) actionButtons += `<a href="${data.liveUrl}" target="_blank" class="btn btn-primary">Visita il Sito Live</a>`;
+    if (data.figmaUrl) actionButtons += `<a href="${data.figmaUrl}" target="_blank" class="btn btn-outline">Prototipo Figma</a>`;
+    if (data.pdfUrl) actionButtons += `<a href="${data.pdfUrl}" target="_blank" class="btn btn-outline" download>Visualizza la Presentazione</a>`;
+
+    const toolsHtml = data.tools.map(t => `
+      <span class="tool-badge">
+        <img src="${t.icon}" alt="Icona ${t.name}" class="tool-icon">
+        <span>${t.name}</span>
+      </span>
+    `).join("");
+
+    const deliverablesHtml = data.deliverables.map(d => `<li>${d}</li>`).join("");
+
+    modalBody.innerHTML = `
+      <div>
+        <h2>${data.title}</h2>
+        <p class="subtitle">${data.subtitle}</p>
+      </div>
+
+      <div class="pdf-viewer-container">
+        <img src="${data.coverUrl}" class="pdf-cover" alt="Copertina del progetto ${cleanTitle}">
+      </div>
+
+      ${data.mockups && data.mockups.length > 0 ? `
+        <div class="mockup-scroll">
+          ${data.mockups.map((img, i) => `
+            <img src="${img}" class="mockup-thumb" data-index="${i}" tabindex="0" role="button" aria-label="Ingrandisci mockup ${i + 1} del progetto ${cleanTitle}" alt="Mockup ${i + 1} del progetto ${cleanTitle}">
+          `).join("")}
+        </div>
+      ` : ""}
+
+      <div class="modal-actions-bar">
+        ${actionButtons}
+      </div>
+
+      <div class="recruiter-summary-box">
+        <h4>Scheda Riassuntiva Progetto</h4>
+        <p><strong>Obiettivo:</strong> ${data.objective}</p>
+
+        <div class="summary-grid">
+          <div class="summary-item">
+            <strong>Software & Tools</strong>
+            <div class="tools-wrapper">${toolsHtml}</div>
+          </div>
+
+          <div class="summary-item">
+            <strong>Risultato</strong>
+            <div class="deliverables-list"><ul>${deliverablesHtml}</ul></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modalBody.dataset.projectId = projectId;
+    applyCoverPosition();
+
+    modal.style.display = "flex";
+    modal.style.flexDirection = "column";
+
+    // Sposta il focus sul pulsante di chiusura per consentire subito la navigazione Tab
+    setTimeout(() => {
+      modalClose.focus();
+    }, 50);
+  }
+
+  // CHIUSURA MODALE PROGETTO
+  function closeProjectModal() {
+    modal.style.display = "none";
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+      lastFocusedElement.focus();
+    }
+  }
+
+  // Rendi tutte le card selezionabili da tastiera (Tab, Invio, Spazio)
   projectCards.forEach(card => {
-    card.addEventListener("click", () => {
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("role", "button");
+
+    const handleSelect = () => {
       const projectId = card.getAttribute("data-id");
-      const data = projectsData[projectId];
+      openProjectModal(projectId, card);
+    };
 
-      if (!data) return;
-
-      // Pulisco il titolo da eventuali tag HTML per gli attributi alt
-      const cleanTitle = data.title.replace(/<[^>]*>/g, "").trim();
-
-      // Bottoni azione
-      let actionButtons = "";
-      if (data.liveUrl) {
-        actionButtons += `<a href="${data.liveUrl}" target="_blank" class="btn btn-primary">Visita il Sito Live</a>`;
+    card.addEventListener("click", handleSelect);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleSelect();
       }
-      if (data.figmaUrl) {
-        actionButtons += `<a href="${data.figmaUrl}" target="_blank" class="btn btn-outline">Prototipo Figma</a>`;
-      }
-      if (data.pdfUrl) {
-        actionButtons += `<a href="${data.pdfUrl}" target="_blank" class="btn btn-outline" download> Visualizza la Presentazione</a>`;
-      }
-
-      // Badge tool con Icona e Nome
-      const toolsHtml = data.tools.map(t => `
-        <span class="tool-badge">
-          <img src="${t.icon}" alt="Icona ${t.name}" class="tool-icon">
-          <span>${t.name}</span>
-        </span>
-      `).join("");
-
-      // Deliverables
-      const deliverablesHtml = data.deliverables.map(d => `<li>${d}</li>`).join("");
-
-      // HTML MODALE
-      modalBody.innerHTML = `
-        <div>
-          <h2>${data.title}</h2>
-          <p class="subtitle">${data.subtitle}</p>
-        </div>
-
-        <div class="pdf-viewer-container">
-          <img src="${data.coverUrl}" class="pdf-cover" alt="Copertina del progetto ${cleanTitle}">
-        </div>
-
-        ${data.mockups && data.mockups.length > 0 ? `
-          <div class="mockup-scroll">
-            ${data.mockups.map((img, i) => `
-              <img src="${img}" class="mockup-thumb" data-index="${i}" alt="Mockup ${i + 1} del progetto ${cleanTitle}">
-            `).join("")}
-          </div>
-        ` : ""}
-
-        <div class="modal-actions-bar">
-          ${actionButtons}
-        </div>
-
-        <div class="recruiter-summary-box">
-          <h4>Scheda Riassuntiva Progetto</h4>
-          <p><strong>Obiettivo:</strong> ${data.objective}</p>
-
-          <div class="summary-grid">
-            <div class="summary-item">
-              <strong>Software & Tools</strong>
-              <div class="tools-wrapper">${toolsHtml}</div>
-            </div>
-
-            <div class="summary-item">
-              <strong>Risultato</strong>
-              <div class="deliverables-list"><ul>${deliverablesHtml}</ul></div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      // Salvo l’ID del progetto nella modale
-      modalBody.dataset.projectId = projectId;
-
-      // Applico la posizione della copertina (solo mobile, solo se definita)
-      applyCoverPosition();
-
-      modal.style.display = "flex";
-      modal.style.flexDirection = "column";
     });
   });
 
-  // CHIUSURA MODALE
-  modalClose.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
+  modalClose.addEventListener("click", closeProjectModal);
 
   window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
+    if (e.target === modal) closeProjectModal();
   });
 
   // ===============================
@@ -241,46 +255,126 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentMockups = [];
   let currentIndex = 0;
+  let lastMockupTrigger = null;
 
-  // Apertura immagine mockup
+  function openImgModal(triggerEl) {
+    const projectId = modalBody.dataset.projectId;
+    const data = projectsData[projectId];
+    if (!data) return;
+
+    lastMockupTrigger = triggerEl;
+    const cleanTitle = data.title.replace(/<[^>]*>/g, "").trim();
+
+    currentMockups = data.mockups;
+    currentIndex = parseInt(triggerEl.dataset.index);
+
+    updateModalImage(cleanTitle);
+    imgModal.style.display = "flex";
+
+    setTimeout(() => {
+      imgClose.focus();
+    }, 50);
+  }
+
+  function updateModalImage(cleanTitle) {
+    imgModalContent.src = currentMockups[currentIndex];
+    imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
+  }
+
+  function closeImgModal() {
+    imgModal.style.display = "none";
+    if (lastMockupTrigger && typeof lastMockupTrigger.focus === "function") {
+      lastMockupTrigger.focus();
+    }
+  }
+
+  function prevImage() {
+    const projectId = modalBody.dataset.projectId;
+    const cleanTitle = projectsData[projectId] ? projectsData[projectId].title.replace(/<[^>]*>/g, "").trim() : "";
+    currentIndex = (currentIndex - 1 + currentMockups.length) % currentMockups.length;
+    updateModalImage(cleanTitle);
+  }
+
+  function nextImage() {
+    const projectId = modalBody.dataset.projectId;
+    const cleanTitle = projectsData[projectId] ? projectsData[projectId].title.replace(/<[^>]*>/g, "").trim() : "";
+    currentIndex = (currentIndex + 1) % currentMockups.length;
+    updateModalImage(cleanTitle);
+  }
+
+  // Eventi apertura mockup (Click e Tastiera)
   document.addEventListener("click", (e) => {
     if (e.target.classList.contains("mockup-thumb")) {
-
-      const projectId = modalBody.dataset.projectId;
-      const data = projectsData[projectId];
-      const cleanTitle = data.title.replace(/<[^>]*>/g, "").trim();
-
-      currentMockups = data.mockups;
-      currentIndex = parseInt(e.target.dataset.index);
-
-      imgModalContent.src = currentMockups[currentIndex];
-      imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
-      imgModal.style.display = "flex";
+      openImgModal(e.target);
     }
   });
 
-  // Navigazione
-  imgPrev.addEventListener("click", () => {
-    const projectId = modalBody.dataset.projectId;
-    const cleanTitle = projectsData[projectId] ? projectsData[projectId].title.replace(/<[^>]*>/g, "").trim() : "";
-    
-    currentIndex = (currentIndex - 1 + currentMockups.length) % currentMockups.length;
-    imgModalContent.src = currentMockups[currentIndex];
-    imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
+  document.addEventListener("keydown", (e) => {
+    if (e.target.classList.contains("mockup-thumb") && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      openImgModal(e.target);
+    }
   });
 
-  imgNext.addEventListener("click", () => {
-    const projectId = modalBody.dataset.projectId;
-    const cleanTitle = projectsData[projectId] ? projectsData[projectId].title.replace(/<[^>]*>/g, "").trim() : "";
+  imgPrev.addEventListener("click", prevImage);
+  imgNext.addEventListener("click", nextImage);
+  imgClose.addEventListener("click", closeImgModal);
 
-    currentIndex = (currentIndex + 1) % currentMockups.length;
-    imgModalContent.src = currentMockups[currentIndex];
-    imgModalContent.alt = `Ingrandimento mockup ${currentIndex + 1} del progetto ${cleanTitle}`;
-  });
+  // ===============================
+  // NAVIGAZIONE GLOBALE TASTIERA (ESC, FOCUS TRAP, FRECCE)
+  // ===============================
 
-  // Chiudi
-  imgClose.addEventListener("click", () => {
-    imgModal.style.display = "none";
+  document.addEventListener("keydown", (e) => {
+    const isImgModalOpen = imgModal.style.display === "flex";
+    const isProjectModalOpen = modal.style.display === "flex";
+
+    // 1. Tasto ESC -> Chiude la modale attiva
+    if (e.key === "Escape") {
+      if (isImgModalOpen) {
+        closeImgModal();
+      } else if (isProjectModalOpen) {
+        closeProjectModal();
+      }
+      return;
+    }
+
+    // 2. Frecce Direzionali nella modale immagini
+    if (isImgModalOpen) {
+      if (e.key === "ArrowLeft") {
+        prevImage();
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        nextImage();
+        return;
+      }
+    }
+
+    // 3. Focus Trap per il tasto TAB
+    if (e.key === "Tab") {
+      const activeModal = isImgModalOpen ? imgModal : (isProjectModalOpen ? modal : null);
+      if (!activeModal) return;
+
+      const focusables = getFocusableElements(activeModal);
+      if (focusables.length === 0) return;
+
+      const firstEl = focusables[0];
+      const lastEl = focusables[focusables.length - 1];
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        // Tab normale
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    }
   });
 
 });
