@@ -63,7 +63,7 @@ const projectsData = {
     objective: "Ammodernare l'immagine coordinata di un'organizzazione no-profit per renderla attrattiva verso nuovi partner e creare un Welcome Kit per i dipendenti.",
     tools: [
       { name: "Adobe Illustrator", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg" },
-      { name: "Adobe ", icon:  "immagini//adobe--icon.png" },
+      { name: "Adobe ", icon:  "immagini//adobe-dimension-icon.png" },
       { name: "Adobe Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" }
     ],
     deliverables: [
