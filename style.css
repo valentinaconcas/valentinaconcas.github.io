@@ -179,6 +179,7 @@ h1, h2, h3, h4 {
   margin-top: 10px;
 }
 
+
 /* HERO SECTION */
 .hero {
   padding: 100px 0 60px 0;
@@ -307,10 +308,10 @@ h1, h2, h3, h4 {
   align-items: flex-end;
 }
 
-.bg-Nalema { background-image: url(immagini/\nalema8.webp); background-repeat: no-repeat; background-position: center;background-size: cover; }
-.bg-scuderia { background-image: url(immagini/header.webp); background-repeat: no-repeat; background-position: center;background-size: cover; }
-.bg-cooperativa {background-image: url(immagini/cooperativa1.webp); background-repeat: no-repeat; background-position: center;background-size: cover;  }
-.bg-hora { background-image: url(immagini/header2.webp); background-repeat: no-repeat; background-position: center;background-size: cover; }
+.bg-Nalema { background-image: url(immagini/nalema8-header.webp); background-repeat: no-repeat; background-position: center;background-size: cover; }
+.bg-scuderia { background-image: url(immagini/header-header.webp); background-repeat: no-repeat; background-position: center;background-size: cover; }
+.bg-cooperativa {background-image: url(immagini/cooperativa1-desktop.webp); background-repeat: no-repeat; background-position: center;background-size: cover;  }
+.bg-hora { background-image: url(immagini/header2-header.webp); background-repeat: no-repeat; background-position: center;background-size: cover; }
 
 /* Galleria orizzontale */
 .mockup-scroll {
@@ -664,6 +665,16 @@ footer {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+
+  .hero-content{margin-top: -60px;}
+
+  .btn-cta {width: 100%;text-align: center;}
+
+.menu-centrale,
+.menu-centrale ul {
+ margin-bottom: 10px;
+}
+
   .hero-grid {
     grid-template-columns: 1fr;
     text-align: center;
@@ -671,6 +682,7 @@ footer {
   }
 
   .hero-portrait {
+    margin-top: 10px;
     width: 180px;
     height: 180px;
   }
@@ -681,10 +693,11 @@ footer {
 
   .hero h1 { font-size: 2rem; }
   .grid-2 { grid-template-columns: 1fr;  gap: 40px; }
-  .about-card > ul {margin-left: 12px;}
-  
-  li:nth-child(odd) {background-color: var(--border-color); margin-bottom: 12px;}
-  li:nth-child(even){background-color: rgb(from var(--primary-orange) r g b / 8%); margin-bottom: 12px;  }
+  .about-card{background-color: var(--border-color); padding:12px 2px 14px 12px;width: 100%;}
+  .about-card > ul {margin-left: 12px;background-color: var(--border-color);padding: 2px;}
+  .about-card > ul> li{background-color: var(--border-color);}
+  li:nth-child(odd) {background-color: var(--border-color); margin-bottom: 12px; width: 100%; text-align: center;}
+  li:nth-child(even){background-color: rgb(from var(--primary-orange) r g b / 8%); margin-bottom: 12px; width: 100%; text-align: center;}
   
   .nav-links {
     display: none;
@@ -705,11 +718,13 @@ footer {
     width: 100%;
   }
   
+  #progetti{background-color:var(--bg-offwhite);margin-top: -60px;}
+  
   .nav-links.active { display: flex; }
   .menu-toggle { display: block; }
 
   .pdf-viewer-container {
-  height: 260px;
+  height: 200px;
 }
 
 .pdf-cover {
@@ -734,7 +749,7 @@ footer {
   
   .img-modal-content {
     height: 200px !important;     
-    width: 340px !important;     
+    width: 350px !important;     
     object-position: center;
     object-fit: cover;          
     display: block;
@@ -753,10 +768,10 @@ br.mobile-br {
 
  .card-image{height:230px ;width: auto ;}
 
- .bg-Nalema { background-image: url(immagini/nalema8.webp);  }
-.bg-scuderia { background-image: url(immagini/header.webp); }
-.bg-cooperativa {background-image: url(immagini/cooperativa1.webp);   }
-.bg-hora { background-image: url(immagini/header2.webp);  }
+ .bg-Nalema { background-image: url(immagini/nalema8-header.webp);  }
+.bg-scuderia { background-image: url(immagini/header-header.webp); }
+.bg-cooperativa {background-image: url(immagini/cooperativa1-desktop.webp);   }
+.bg-hora { background-image: url(immagini/header2-header.webp) }
 
 .mockup-thumb{width: 70vw;}
 }
